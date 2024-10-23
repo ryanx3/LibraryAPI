@@ -1,4 +1,5 @@
 ﻿using LibraryAPI.Communication.Requests;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryAPI.Controllers;
@@ -36,4 +37,23 @@ public class BookController : LibraryBaseController
     {
         return Ok(_books);
     }
+
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult DeleteBook([FromRoute] string id)
+    {
+        var bookRemove = _books.Find(book => book.Id == id);
+
+        if (bookRemove != null)
+        {
+            _books.Remove(bookRemove);
+            return NoContent();
+        } else
+        {
+            return NotFound("Book not found");
+        }
+    }
+
 }
