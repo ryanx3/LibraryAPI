@@ -56,4 +56,23 @@ public class BookController : LibraryBaseController
         }
     }
 
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(RequestUpdateBookJson), StatusCodes.Status204NoContent)]
+    public IActionResult UpdateBook([FromBody] RequestUpdateBookJson request, string id)
+    {
+        var book = _books.Find(book => book.Id == id);
+
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        book.Author = request.Author;
+        book.Title = request.Title;
+        book.Stock = request.Stock;
+        book.Price = request.Price;
+        book.Genre = request.Genre;
+
+        return NoContent();
+    }
 }
